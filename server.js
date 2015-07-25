@@ -6,7 +6,7 @@ var url = require('url');
 if (app.env === 'production') {
   app.use(function *(next){
     var isHTTPS = /^https:\/\//i.test(this.request.url);
-    console.log('isHTTPS', isHTTPS, this.request.url);
+    console.log('isHTTPS', isHTTPS, this.request.header.host);
     if (isHTTPS) {
        return yield next;
     } else {
