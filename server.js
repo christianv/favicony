@@ -13,7 +13,6 @@ if (app.env === 'production') {
     } else {
       var urlObject = url.parse('http://' + this.request.header.host);
       var httpsHost = urlObject.hostname;
-      this.response.status = 301;
       this.response.redirect('https://' + httpsHost + ':' + this.request.url);
     }
   });
