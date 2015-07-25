@@ -3,7 +3,7 @@ var app = koa();
 var forceSSL = require('koa-force-ssl');
 
 // Force SSL on all page
-console.log('app.env', app.env);
+console.log('app.env', app.env, process.env.NODE_ENV);
 if (app.env === 'production') {
   app.use(forceSSL());
 }
