@@ -9,11 +9,12 @@ if (app.env === 'production') {
     var isHTTPS = /^https:\/\//i.test(fullUrl);
     console.log('isHTTPS', isHTTPS, this.request.href);
     if (isHTTPS) {
-       return yield next;
+      return yield next;
     } else {
       var urlObject = url.parse('http://' + this.request.header.host);
       var httpsHost = urlObject.hostname;
       this.response.redirect('https://' + httpsHost + ':' + this.request.url);
+      return yield next;
     }
   });
 }
