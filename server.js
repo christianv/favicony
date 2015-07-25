@@ -5,15 +5,14 @@ var url = require('url');
 // Force SSL on all page
 if (app.env === 'production') {
   app.use(function *(next){
-    var isHTTPS = /^https:\/\//i.test(this.request.url);
-    console.log('isHTTPS', isHTTPS, this.request.header.host);
+    var protocol = this.request.protocol;
+    console.log('protocol', protocol);
+    var isHTTPS = (protocol === 'https');
     if (isHTTPS) {
        return yield next;
     } else {
-      var urlObject = url.parse('http://' + this.request.header.host);
-      var httpsHost = urlObject.hostname;
       this.response.status = 301;
-      this.response.redirect('https://' + httpsHost + ':' + this.request.url);
+      this.response.redirect(this.request.href.replace(/^http/, 'https'));
     }
   });
 }
