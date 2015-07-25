@@ -5,9 +5,9 @@ var url = require('url');
 // Force SSL on all page
 if (app.env === 'production') {
   app.use(function *(next){
-    var protocol = this.request.protocol;
-    console.log('protocol', protocol);
-    var isHTTPS = protocol === 'https';
+    var fullUrl = this.request.href;
+    var isHTTPS = /^https:\/\//i.test(fullUrl);
+    console.log('isHTTPS', isHTTPS, this.request.href);
     if (isHTTPS) {
        return yield next;
     } else {
