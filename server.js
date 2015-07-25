@@ -7,12 +7,14 @@ if (app.env === 'production') {
   app.use(function *(next){
     var protocol = this.request.protocol;
     console.log('protocol', protocol);
-    var isHTTPS = (protocol === 'https');
+    var isHTTPS = protocol === 'https';
     if (isHTTPS) {
        return yield next;
     } else {
+      var urlObject = url.parse('http://' + this.request.header.host);
+      var httpsHost = urlObject.hostname;
       this.response.status = 301;
-      this.response.redirect(this.request.href.replace(/^http/, 'https'));
+      this.response.redirect('https://' + httpsHost + ':' + this.request.url);
     }
   });
 }
