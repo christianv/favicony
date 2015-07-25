@@ -1,11 +1,19 @@
 var koa = require('koa');
 var app = koa();
-var forceSSL = require('koa-force-ssl');
+var url = require('url');
 
 // Force SSL on all page
-console.log('app.env', app.env, process.env.NODE_ENV);
 if (app.env === 'production') {
-  app.use(forceSSL());
+  app.use(function *(next){
+    console.log('secure', this.secure);
+    if (this.secure) {
+      return yield next;
+    }
+    var urlObject = url.parse('http://' + this.request.header.host);
+    var httpsHost = urlObject.hostname;
+    this.response.status = 301;
+    this.response.redirect('https://' + httpsHost + ':' + this.request.url);
+  });
 }
 
 // Logger
